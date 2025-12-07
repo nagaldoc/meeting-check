@@ -61,7 +61,7 @@
             cursor: pointer; animation: pulse 2s infinite;
         }
 
-        /* --- [수정] 1단계 재생 버튼 스타일 추가 --- */
+        /* --- 1단계 재생 버튼 스타일 --- */
         .play-circle {
             width: 120px; height: 120px;
             background-color: #ffeb3b; /* 노란색 배경 */
@@ -81,7 +81,7 @@
 
         @keyframes pulse {
             0% { transform: scale(1); }
-            50% { transform: scale(1.05); } /* 조금 더 커지게 수정 */
+            50% { transform: scale(1.05); } 
             100% { transform: scale(1); }
         }
 
@@ -164,7 +164,11 @@
             }
 
             audio.pause();
-            window.location.href = JITSI_SERVER + roomName;
+            
+            // [수정된 부분]
+            // #config.disableDeepLinking=true 를 추가하여 
+            // 앱 실행을 막고 브라우저에서 회의를 강제 실행합니다.
+            window.location.href = JITSI_SERVER + roomName + '#config.disableDeepLinking=true';
         }
     </script>
 </body>
