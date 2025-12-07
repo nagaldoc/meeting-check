@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>미팅 입장: 소리 확인</title>
+    <style>
+        /* [어르신들을 위한 고대비 스타일링] */
+        body { 
+            text-align: center; margin: 0; padding: 0; 
+            background-color: #000000; color: white; 
+            font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+            min-height: 100vh; 
+            display: flex; flex-direction: column; 
+            align-items: center; justify-content: center;
+        }
+
+        /* 1단계: 최초 터치 유도 화면 (전체 화면 덮개) */
+        #step-1-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #2c3e50;
+            display: flex; flex-direction: column; 
+            align-items: center; justify-content: center;
+            z-index: 999; cursor: pointer;
+        }
+        
+        /* 2단계: 메인 컨텐츠 (초기에는 숨김 상태) */
+        #step-2-content { 
+            display: none; 
+            width: 90%; max-width: 600px; 
+            padding: 40px 0; 
+        }
+
+        h1 { color: #ffeb3b; font-size: 2.2rem; margin-bottom: 10px; line-height: 1.3; }
+        p { font-size: 1.3rem; line-height: 1.5; margin-bottom: 0; word-break: keep-all; }
+        
+        .highlight { color: #ff5722; font-weight: bold; border-bottom: 2px solid #ff5722;}
+        
+        .instruction-box {
+            background-color: #333; padding: 25px 20px; 
+            border-radius: 15px; border: 2px solid #555; margin-bottom: 30px;
+        }
+
+        .divider { border: 0; height: 2px; background: #555; margin: 30px 0; }
+
+        .instruction-img {
+            max-width: 80%; height: auto;
+            margin: 15px auto 10px auto;
+            border-radius: 12px;
+            border: 3px solid #ffeb3b; 
+            display: block;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        #enter-button { 
+            display: block; width: 100%; padding: 25px 0;
+            font-size: 2rem; font-weight: bold;
+            background-color: #4CAF50; color: white; 
+            border: none; border-radius: 50px; 
+            box-shadow: 0 5px 15px rgba(0,255,0,0.3);
+            cursor: pointer; animation: pulse 2s infinite;
+        }
+
+        /* --- [수정] 1단계 재생 버튼 스타일 추가 --- */
+        .play-circle {
+            width: 120px; height: 120px;
+            background-color: #ffeb3b; /* 노란색 배경 */
+            border-radius: 50%; /* 원형 */
+            display: flex; align-items: center; justify-content: center;
+            margin: 30px auto; /* 위아래 간격 */
+            box-shadow: 0 0 30px rgba(255, 235, 59, 0.4); /* 빛나는 효과 */
+            animation: pulse 2s infinite;
+        }
+        
+        .play-icon-symbol {
+            color: #2c3e50; /* 아이콘 색상 (배경과 대비) */
+            font-size: 4rem; 
+            margin-left: 10px; /* 재생 삼각형 시각 보정 */
+        }
+        /* -------------------------------------- */
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); } /* 조금 더 커지게 수정 */
+            100% { transform: scale(1); }
+        }
+
+        .icon { font-size: 4rem; margin-bottom: 20px; display: block; }
+    </style>
+</head>
+<body>
+
+    <div id="step-1-overlay" onclick="enableAudio()">
+        
+        <h1>소리 확인을 위해<br>화면을 눌러주세요</h1>
+        
+        <div class="play-circle">
+            <span class="play-icon-symbol">▶</span>
+        </div>
+
+        <p style="color:#ccc; font-size:1.2rem;">(여기를 누르면 소리가 재생됩니다)</p>
+
+    </div>
+
+    <div id="step-2-content">
+        <span class="icon">🎵</span>
+        <h1>지금 음악을<br>재생 중입니다.</h1>
+        <p style="font-size: 1.2rem; color: #ff9800; font-weight: bold; margin-bottom: 30px;">
+            소리가 작거나 안 들리시는 분들은<br>아래 안내에 따라주세요
+        </p>
+        
+        <div class="instruction-box">
+            <p>
+                📱 <strong>스마트폰으로 접속하신 분들</strong><br>
+                옆면의 <span class="highlight">볼륨 버튼(🔊)을 눌러서</span><br>
+                소리를 높여주세요.
+            </p>
+            <img src="스마트폰 볼륨버튼 안내.png" 
+                 alt="스마트폰 볼륨 버튼 위치" class="instruction-img">
+
+            <hr class="divider">
+
+            <p>
+                💻 <strong>컴퓨터로 접속하신 분들</strong><br>
+                우측하단 <span class="highlight">윈도우 볼륨 아이콘</span>을 눌러<br>
+                소리를 높여주세요.
+            </p>
+            <img src="윈도우 볼륨조절.jpg" 
+                 alt="컴퓨터 윈도우 볼륨 조절 위치" class="instruction-img">
+        </div>
+
+        <p style="font-size: 1.3rem; color: #fff; font-weight: bold; margin: 20px 0 15px 0; background-color: #222; padding: 10px; border-radius: 10px;">
+            👇 소리가 잘 들리면 아래 버튼을 누르세요
+        </p>
+
+        <button id="enter-button" onclick="enterRoom()">
+            회의에 입장하기 🚪
+        </button>
+    </div>
+
+    <audio id="test-audio" src="test.mp3" preload="auto" loop></audio>
+
+    <script>
+        const JITSI_SERVER = "https://meet.jit.si/"; 
+        const audio = document.getElementById('test-audio');
+
+        function enableAudio() {
+            audio.play().then(() => {
+                document.getElementById('step-1-overlay').style.display = 'none';
+                document.getElementById('step-2-content').style.display = 'block';
+            }).catch(error => {
+                console.log("재생 실패:", error);
+                alert("죄송합니다. 소리 재생을 위해 화면을 한 번 더 눌러주세요.");
+            });
+        }
+
+        function enterRoom() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const roomName = urlParams.get('room');
+
+            if (!roomName) {
+                alert("접속 주소가 잘못되었습니다. 관리자에게 문의하세요.\n(방 이름 room 파라미터 누락)");
+                return;
+            }
+
+            audio.pause();
+            window.location.href = JITSI_SERVER + roomName;
+        }
+    </script>
+</body>
+</html>
